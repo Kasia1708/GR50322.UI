@@ -1,7 +1,8 @@
-using System.Diagnostics;
 using GR50322.UI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Diagnostics;
 
 namespace GR50322.UI.Controllers
 {
@@ -23,12 +24,12 @@ namespace GR50322.UI.Controllers
         var data = new SelectList(listData, "Id", "Name");
             return View(data);
         }
-
+        [Authorize (Policy="admin")]
+        public IActionResult ProtectedPage()
+        {
+            return View();
+        }
        
     }
-    public class ListDemo
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
+   
 }
