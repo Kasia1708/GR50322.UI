@@ -1,4 +1,5 @@
 using GR50322.UI.Data;
+using GR50322.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ builder.Services.AddAuthorization(opt =>
 });
 builder.Services.AddSingleton<IEmailSender, NoOpEmailSender>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ICategoryService, MemoryCategoryService>();
+builder.Services.AddScoped<IProductService, MemoryProductService>();
 
 var app = builder.Build();
 
@@ -59,5 +62,7 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 await DbInitializer.SetupAdmin(app);
+
+
 
 app.Run();

@@ -4,5 +4,7 @@ namespace GR50322.UI.Data
 {
     public class ApplicationUser:IdentityUser
     {
+        public byte[]? Avatar { get; set; }
+
     }
 }

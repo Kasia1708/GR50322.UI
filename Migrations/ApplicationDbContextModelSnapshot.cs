@@ -15,7 +15,7 @@ namespace GR50322.UI.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.20");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.22");
 
             modelBuilder.Entity("GR50322.UI.Data.ApplicationUser", b =>
                 {
@@ -24,6 +24,9 @@ namespace GR50322.UI.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("Avatar")
+                        .HasColumnType("BLOB");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

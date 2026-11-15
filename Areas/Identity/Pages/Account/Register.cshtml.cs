@@ -51,6 +51,8 @@ public class RegisterModel : PageModel
     /// </summary>
     [BindProperty]
     public InputModel Input { get; set; } = default!;
+    [BindProperty]
+    public IFormFile Avatar { get; set; }
 
     /// <summary>
     ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -116,6 +118,14 @@ public class RegisterModel : PageModel
 
             await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+            if(Avatar is not null)
+            {
+                var stream = new MemoryStream();
+                await Avatar.CopyToAsync(stream);
+                user.Avatar=stream.ToArray();
+            }
+
             var result = await _userManager.CreateAsync(user, Input.Password);
 
             if (result.Succeeded)
