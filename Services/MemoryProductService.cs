@@ -109,7 +109,7 @@ namespace GR50322.UI.Services
 
             // Получаем размер страницы из конфигурации (по умолчанию 3)
             int pageSize = _config.GetSection("ItemsPerPage").Get<int>();
-            if (pageSize <= 0) pageSize = 10;
+            if (pageSize <= 0) pageSize = 3;
 
             // Вычисляем общее количество страниц
             int totalPages = (int)Math.Ceiling(data.Count / (double)pageSize);

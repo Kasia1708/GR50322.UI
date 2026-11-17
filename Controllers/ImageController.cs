@@ -14,7 +14,7 @@ namespace GR50322.UI.Controllers
             if (user.Avatar != null)
                 return File(user.Avatar, "image/*");
            
-            return File ("image/default-profile-picture.jpg", "image/*");
+            return File ("images/default-profile-picture.jpg", "image/*");
             
         }
     }

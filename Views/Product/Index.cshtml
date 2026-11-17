@@ -1,10 +1,19 @@
-﻿@model IEnumerable<GR50322.Domain.Entities.StudentGroup>
+﻿@model ProductListModel<StudentGroup>
 
 @{
     ViewData["Title"] = "Каталог студентов";
     var request = ViewContext.HttpContext.Request;
     var returnUrl = request.Path + request.QueryString.ToUriComponent();
     var categories = ViewData["categories"] as IEnumerable<GR50322.Domain.Entities.Category>;
+  
+    string? category = request.RouteValues["category"]?.ToString();
+    //string? category = request.Query["category"].ToString();
+    int prev = Model.CurrentPage == 1
+        ? 1
+        : Model.CurrentPage - 1;
+    int next = Model.CurrentPage == Model.TotalPages
+        ? Model.TotalPages
+        : Model.CurrentPage + 1;
 }
 
 <h2 class="m-3">Список студентов</h2>
@@ -47,40 +56,61 @@
 
     <!-- список карточек -->
     <div class="col-10">
-        @if (Model != null && Model.Any())
+        @if (Model != null && Model.Items.Any())
         {
             <div class="row">
-                @foreach (var item in Model)
+                @foreach (var item in Model.Items)
                 {
-                    <div class="col-md-4 p-2">
-                        <div class="card border-dark h-100">
-                            <img class="card-img-top"
-                                 src="~/@item.Image"
-                                 alt="No image available"
-                                 style="height: 220px; object-fit: cover;" />
-                            <div class="card-body">
-                                <h5 class="card-title">@item.Name</h5>
-                                <p class="card-text">@item.Description</p>
-                                <h5>
-                                    <span class="badge bg-primary">@item.Category?.Name</span>
-                                    <span class="badge bg-secondary">Балл: @item.StudentsCount</span>
-                                    <span class="badge bg-info text-dark">Год: @item.StartYear</span>
-                                </h5>
-                            </div>
-                            <div class="card-footer text-center">
-                                <a class="btn btn-outline-primary"
-                                   asp-action="Add"
-                                   asp-controller="Cart"
-                                   asp-route-id="@item.Id"
-                                   asp-route-returnurl="@returnUrl">
-                                    Добавить в корзину <i class="fa-solid fa-cart-shopping"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <partial name="_ListItemPartial" model="@item" />
                 }
             </div>
         }
         <h2 class="text-warning">@ViewData["Error"]</h2>
     </div>
 </div>
+
+
+
+<pager current-page="@Model.CurrentPage"
+       total-pages="@Model.TotalPages"
+category="@category">
+   </pager>
+            <!-- Pager -->
+<div class="row">
+<nav aria-label="Page navigation example">
+<ul class="pagination">
+<li class="page-item @(prev==Model.CurrentPage ? "disabled":"")">
+<a class="page-link "
+asp-controller="Product"
+asp-action="Index"
+asp-route-pageno="@prev"
+asp-route-category="@category" aria-label="Previous">
+<span aria-hidden="true">&laquo;</span>
+</a>
+</li>
+@for (int i = 1; i <= Model.TotalPages; i++)
+{
+<li class="page-item
+@(i==Model.CurrentPage?"active":"")">
+<a class="page-link"
+                                   asp-controller="Product"
+                                   asp-action="Index"
+                                   asp-route-pageno="@i"
+                                   asp-route-category="@category">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                        <li class="page-item @(next==Model.CurrentPage ?
+                            "disabled" : "")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-pageno="@next"
+                               asp-route-category="@category" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div> <!-- Pager -->
+           
